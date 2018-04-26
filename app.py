@@ -8,12 +8,13 @@ mysql = MySQL()
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'cse305'
-app.config['MYSQL_DATABASE_DB'] = 'bucketlist'
+app.config['MYSQL_DATABASE_DB'] = 'TravelAgency'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
+session = -1
 
 @app.route("/")
 def main():
@@ -26,6 +27,33 @@ def home():
 @app.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')
+
+@app.route('/joinGroup')
+def joinGroup():
+    # query = ('SELECT * (user_name, user_username,user_password)' 'VALUES (%s,%s,%s)')
+    # data = ("dogs", "cats", "pw")
+    # cursor.execute(query,data)
+    return render_template('group.html', session=session, )
+
+@app.route('/searchGroup',methods=['POST'])
+def checkGroup():
+    grp_id = request.form['grpID']
+    query = ('SELECT PassengerId FROM ParticipatesIn WHERE GrpId=%s')
+
+    # data = ("dogs", "cats", "pw")
+    cursor.execute(query,grp_id)
+    result = cursor.fetchall()
+    passengers = []
+    for id in result:
+        passenger_id = id[0]
+        query = ('SELECT * FROM Passenger WHERE Id=%s')
+        cursor.execute(query,passenger_id)
+        passengers += cursor.fetchall()
+
+    if len(result) is 0:
+        return json.dumps({'result':-1})
+    else:
+        return json.dumps({'result':1,'GrpID':grp_id, 'Passengers':passengers})
 
 @app.route('/signUp',methods=['POST'])
 def signUp():

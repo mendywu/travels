@@ -14,7 +14,8 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
-session = 1 # maybe this can hold the PassengerID who is logged in
+session = 1113 # holds the PassengerID who is logged in
+grp = []
 
 @app.route("/")
 def main():
@@ -27,6 +28,28 @@ def home():
 @app.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')
+
+@app.route('/signUp',methods=['POST'])
+def signUp():
+    # create user code will be here !!
+    # read the posted values from the UI
+    _name = request.form['inputName']
+    _email = request.form['inputEmail']
+    _password = request.form['inputPassword']
+
+    # validate the received values
+    if _name and _email and _password:
+        #return json.dumps({'html':'<span>All fields good !!</span>'})
+        cursor.callproc('sp_createUser',(_name,_email,_password))
+
+        data = cursor.fetchall()
+        if len(data) is 0:
+            conn.commit()
+            return json.dumps({'message':'User created successfully !'})
+        else:
+            return json.dumps({'error':str(data[0])})
+    else:
+        return json.dumps({'html':'<span>Enter the required fields</span>'})
 
 @app.route('/joinGroup')
 def joinGroup():
@@ -43,16 +66,19 @@ def checkGroup():
     cursor.execute(query,grp_id)
     result = cursor.fetchall()
     passengers = []
+    inGroup = 0
     for id in result:
         passenger_id = id[0]
         query = ('SELECT * FROM Passenger WHERE Id=%s')
         cursor.execute(query,passenger_id)
         passengers += cursor.fetchall()
+        if passenger_id == session:
+            inGroup = 1
 
     if len(result) is 0:
         return json.dumps({'result':-1})
     else:
-        return json.dumps({'result':1,'GrpID':grp_id, 'Passengers':passengers})
+        return json.dumps({'result':1,'GrpID':grp_id, 'Passengers':passengers,'inGroup':inGroup})
 
 @app.route('/createGroup',methods=['POST'])
 def createGroup():
@@ -61,42 +87,58 @@ def createGroup():
     _size = request.form['inputGrpSize']
     _purpose = request.form['inputGrpPurpose']
 
-    return json.dumps({'message':_purpose})
+    #return json.dumps({'message':_id, 'size':_size, 'purpose':_purpose})
+    query = ('SELECT PassengerId FROM ParticipatesIn WHERE GrpId=%s')
+    cursor.execute(query,_id)
+    result = cursor.fetchall()
+    if len(result) != 0:
+        return json.dumps({'message':-1})
 
-    #query = ('INSERT INTO Grp (Id,Size,Purpose)' 'VALUES (%s,%s,%s)')
-    #data = (_id, _size, _purpose)
-    #cursor.execute(query,data)
+    query = ('INSERT INTO Grp (Id,Size,Purpose)' 'VALUES (%s,%s,%s)')
+    data = (int(_id), int(_size), _purpose)
+    cursor.execute(query,data)
 
-    #query = ('INSERT INTO ParticipatesIn (PassengerId,GrpId)' 'VALUES (%s,%s)')
-    #data = (123,_id)
-    #cursor.execute(query,data)
+    query = ('INSERT INTO ParticipatesIn (PassengerId,GrpId)' 'VALUES (%s,%s)')
+    data = (session,_id)
+    cursor.execute(query,data)
+    conn.commit()
 
+    return json.dumps({'message':"added successfully"})
     #return render_template('signup.html')
 
-@app.route('/signUp',methods=['POST'])
-def signUp():
-    # create user code will be here !!
-    # read the posted values from the UI
-    _name = request.form['inputName']
-    _email = request.form['inputEmail']
-    _password = request.form['inputPassword']
-    # query = ('INSERT INTO tbl_user (user_name, user_username,user_password)' 'VALUES (%s,%s,%s)')
-    # data = ("dogs", "cats", "pw")
-    # cursor.execute(query,data)
+@app.route('/joinGroupOfficially',methods=['POST'])
+def joinGroupOfficially():
 
-    # validate the received values
-    if _name and _email and _password:
-        #return json.dumps({'html':'<span>All fields good !!</span>'})
-        cursor.callproc('sp_createUser',(_name,_email,_password))
+    group_id = request.form['grpID']
 
-        data = cursor.fetchall()
-        if len(data) is 0:
-            conn.commit()
-            return json.dumps({'message':'User created successfully !'})
-        else:
-            return json.dumps({'error':str(data[0])})
-    else:
-        return json.dumps({'html':'<span>Enter the required fields</span>'})
+    query = ('SELECT PassengerID FROM ParticipatesIn WHERE GrpId = %s AND PassengerID=%s')
+    cursor.execute(query,(group_id,session))
+    result = cursor.fetchall()
+    if len(result) != 0:
+        return json.dumps({'message':-1})
+
+    query = ('INSERT INTO ParticipatesIn (PassengerId,GrpId)' 'VALUES (%s,%s)')
+    data = (session,group_id)
+    cursor.execute(query,data)
+    conn.commit()
+
+    return json.dumps({'message':1})
+
+@app.route('/leaveGroup',methods=['POST'])
+def leaveGroup():
+    group_id = request.form['grpID']
+
+    query = ('DELETE FROM ParticipatesIn WHERE GrpId = %s AND PassengerID=%s')
+    cursor.execute(query,(group_id,session))
+
+    query = ('SELECT PassengerId FROM ParticipatesIn WHERE GrpId = %s')
+    cursor.execute(query,(group_id))
+    result = cursor.fetchall()
+    if len(result) == 0:
+        cursor.execute(('DELETE FROM Grp WHERE Id = %s'),(group_id))
+    conn.commit()
+
+    return json.dumps({'message':1})
 
 if __name__ == "__main__":
     app.run()

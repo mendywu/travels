@@ -15,6 +15,12 @@
 		.unhidden{
 		    display:block;
 		}
+		#joinGroupDiv {
+    	display: inline-block;
+		}
+		#leaveGroupDiv {
+	    display: inline-block;
+		}
 </style>
 	<!-- Bootstrap -->
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
@@ -60,45 +66,45 @@
 </header>
 
 <main id="main">
-
-	<div class="container" id="gg">
+	<div class="container">
 		<div class="row topspace">
 	    <div class="col-xs-3">
 				<form id="groupForm" class="form-signin">
 	        	<input type="text" class="form-control" id="grpID" name="grpID" placeholder="Enter Group ID">
-				<form>
+				</form>
 	    </div>
-        <button id="searchGroup" type="button" class="btn btn-info">Search</button>
+        <button id="searchGroup" onclick="searching()" type="button" class="btn btn-info">Search</button>
 				<button id="createGroup" type="button" onclick="createGroupPage()" class="btn btn-info">Create Group</button>
 			</div>
 			<div id="groupTable"></div>
 			<div id='joinGroupDiv' class='hidden'>
 				<button type="button" onclick="joinGroup()" class="btn btn-info" id="joinGroupBtn">Join Group</button>
 			</div>
-			<div id="joinSuccess" class="hidden">
-				hellooooo
+			<div id='leaveGroupDiv' class='hidden'>
+				<button type="button" onclick="leaveGroup()" class="btn btn-info" id="leaveGroupButton">Leave Group</button>
 			</div>
 			<div id="createGroupFormdiv" class='hidden'>
 			<form id="createGroupForm" class="form-signin">
 					<label for="inputGrpID">Group ID</label>
-          <input class="form-control" id="inputGrpID" type='text' placeholder="Enter Group ID">
+          <input class="form-control" id="inputGrpID" name="inputGrpID" type='text' placeholder="Enter Group ID">
 
-            <label for="inputGrpSize">Size</label>
-            <input class="form-control" id="inputGrpSize" placeholder="Enter Group Size">
+          <label for="inputGrpSize">Size</label>
+          <input class="form-control" id="inputGrpSize" name="inputGrpSize" placeholder="Enter Group Size">
 
-          <div class="form-group">
-            <label for="inputGrpPurpose">Purpose of Trip:</label>
-            <select class="form-control" id="inputGrpPurpose">
+          <label for="inputGrpPurpose">Purpose of Trip:</label>
+            <select class="form-control" id="inputGrpPurpose" name="inputGrpPurpose">
               <option value="" selected disabled>Select Purpose</option>
               <option>Education</option>
               <option>Business</option>
               <option>Pleasure</option>
               <option>Other</option>
             </select>
-          </div>
 				</form>
 				<button id="createGrpBtn" type="button" onclick="createAGroup()" class="btn btn-info">Create</button>
+				<div id="groupError" class="hidden"><h5>A group with that ID already exists!</h5></div>
+				<div id="groupSuccess" class="hidden"><h5>Group successfully created!</h5></div>
 			</div>
+			<div id="joinError" class="hidden"><h5>You are already part of the group!</h5></div>
 	</div>	<!-- /container -->
 
 </main>

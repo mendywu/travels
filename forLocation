@@ -1,0 +1,16 @@
+def populate_tbl(locId, city, state, country):
+    #query = ('INSERT INTO location(id, city, state, country)' 'VALUES (%s, %s, %s, %s)')    
+    #data = (1, 'Buffalo', 'New York', 'United States of America')
+    #cursor.execute(query, data)
+    query = ('INSERT INTO location(id, city, state, country)' 'VALUES(%s, %s, %s, %s)')
+    cursor.execute(query, (locId, city, state, country))
+
+populate_tbl(3, 'Albany', 'New York', 'United States of America')
+populate_tbl(4, 'New York City', 'New York', 'United States of America')
+populate_tbl(5, 'Atlanta', 'Georgia', 'United States of America')
+
+@app.route('/showLoc')
+def getLoc():
+    cursor.execute('SELECT city, state, country FROM location')
+    data = cursor.fetchall() # returns list of tuples
+    return render_template('loc.html',data = data)

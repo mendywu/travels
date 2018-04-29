@@ -26,6 +26,12 @@
 		<h1 id="logo" class="text-center">
 			<span class="title" style="font-size:190%; font-weight:bold">Travel Agency</span>
 			<span class="tagline" style="font-size:60%"><b>Book your next vacation today!</b>
+				{% if name %}
+			<span class="tagline" style="font-size:90%"><b>Welcome Back, {{name}}!</b>
+				{% endif %}
+				{% if nameNew %}
+			<span class="tagline" style="font-size:90%"><b>Welcome, {{nameNew}}!</b>
+				{% endif %}
 				<br><br>
 				<p class="text-center"><a href="showSignUp" class="btn btn-action">Start</a></p>
 		</h1>
@@ -40,6 +46,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="home">Home</a></li>
 					<li><a href="">Locations</a></li>
+					<li><a href="/transportation">Transportation</a></li>
 					<li><a href="">Accomocations</a></li>
 					<li><a href="">Join Travel Group?</a></li>
 					<li><a href="">Contact</a></li>

@@ -14,7 +14,7 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
-session = -1
+session = 1 # maybe this can hold the PassengerID who is logged in
 
 @app.route("/")
 def main():
@@ -30,17 +30,16 @@ def showSignUp():
 
 @app.route('/joinGroup')
 def joinGroup():
-    # query = ('SELECT * (user_name, user_username,user_password)' 'VALUES (%s,%s,%s)')
-    # data = ("dogs", "cats", "pw")
-    # cursor.execute(query,data)
-    return render_template('group.html', session=session, )
+    return render_template('group.html')
 
 @app.route('/searchGroup',methods=['POST'])
 def checkGroup():
+    if session is -1:
+        return json.dumps({'result': 0})
+
     grp_id = request.form['grpID']
     query = ('SELECT PassengerId FROM ParticipatesIn WHERE GrpId=%s')
 
-    # data = ("dogs", "cats", "pw")
     cursor.execute(query,grp_id)
     result = cursor.fetchall()
     passengers = []
@@ -54,6 +53,25 @@ def checkGroup():
         return json.dumps({'result':-1})
     else:
         return json.dumps({'result':1,'GrpID':grp_id, 'Passengers':passengers})
+
+@app.route('/createGroup',methods=['POST'])
+def createGroup():
+
+    _id = request.form['inputGrpID']
+    _size = request.form['inputGrpSize']
+    _purpose = request.form['inputGrpPurpose']
+
+    return json.dumps({'message':_purpose})
+
+    #query = ('INSERT INTO Grp (Id,Size,Purpose)' 'VALUES (%s,%s,%s)')
+    #data = (_id, _size, _purpose)
+    #cursor.execute(query,data)
+
+    #query = ('INSERT INTO ParticipatesIn (PassengerId,GrpId)' 'VALUES (%s,%s)')
+    #data = (123,_id)
+    #cursor.execute(query,data)
+
+    #return render_template('signup.html')
 
 @app.route('/signUp',methods=['POST'])
 def signUp():

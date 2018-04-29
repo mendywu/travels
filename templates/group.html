@@ -6,8 +6,16 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 
-	<title>Destinations</title>
+	<title>Join Group</title>
+	<style>
+		.hidden{
+		    display:none;
+		}
 
+		.unhidden{
+		    display:block;
+		}
+</style>
 	<!-- Bootstrap -->
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
 	<!-- Icon font -->
@@ -19,7 +27,7 @@
 	<link rel="stylesheet" href="../static/assets/css/styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="../static/js/jquery-3.3.1.min.js"></script>
-	<script src="../static/js/script.js"></script>
+	<script src="../static/js/group.js"></script>
 
 	<!--[if lt IE 9]> <script src="assets/js/html5shiv.js"></script> <![endif]-->
 </head>
@@ -28,7 +36,7 @@
 <header id="header">
 	<div id="head" class="parallax" parallax-speed="1">
 		<h1 id="logo" class="text-center">
-			<span class="title">Join Travel Group</span>
+			<span class="title">Travel Groups</span>
 		</h1>
 	</div>
 
@@ -61,8 +69,36 @@
 				<form>
 	    </div>
         <button id="searchGroup" type="button" class="btn btn-info">Search</button>
+				<button id="createGroup" type="button" onclick="createGroupPage()" class="btn btn-info">Create Group</button>
 			</div>
 			<div id="groupTable"></div>
+			<div id='joinGroupDiv' class='hidden'>
+				<button type="button" onclick="joinGroup()" class="btn btn-info" id="joinGroupBtn">Join Group</button>
+			</div>
+			<div id="joinSuccess" class="hidden">
+				hellooooo
+			</div>
+			<div id="createGroupFormdiv" class='hidden'>
+			<form id="createGroupForm" class="form-signin">
+					<label for="inputGrpID">Group ID</label>
+          <input class="form-control" id="inputGrpID" type='text' placeholder="Enter Group ID">
+
+            <label for="inputGrpSize">Size</label>
+            <input class="form-control" id="inputGrpSize" placeholder="Enter Group Size">
+
+          <div class="form-group">
+            <label for="inputGrpPurpose">Purpose of Trip:</label>
+            <select class="form-control" id="inputGrpPurpose">
+              <option value="" selected disabled>Select Purpose</option>
+              <option>Education</option>
+              <option>Business</option>
+              <option>Pleasure</option>
+              <option>Other</option>
+            </select>
+          </div>
+				</form>
+				<button id="createGrpBtn" type="button" onclick="createAGroup()" class="btn btn-info">Create</button>
+			</div>
 	</div>	<!-- /container -->
 
 </main>

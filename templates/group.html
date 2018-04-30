@@ -6,7 +6,7 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 
-	<title>Join Group</title>
+	<title>Groups</title>
 	<style>
 		.hidden{
 		    display:none;
@@ -43,6 +43,9 @@
 	<div id="head" class="parallax" parallax-speed="1">
 		<h1 id="logo" class="text-center">
 			<span class="title">Travel Groups</span>
+			{% if name != "" %}
+		<span class="tagline" style="font-size:90%"><b>Hello, {{name}}!</b>
+			{% endif %}
 		</h1>
 	</div>
 
@@ -57,8 +60,8 @@
 					<li class="active"><a href="home">Home</a></li>
 					<li><a href="">Book a Trip</a></li>
 					<li><a href="">Locations</a></li>
-					<li><a href="">Join Travel Group</a></li>
-					<li><a href="">Reviews</a></li>
+					<li><a href="joinGroup">Travel Groups</a></li>
+					<li><a href="review">Reviews</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -76,12 +79,17 @@
         <button id="searchGroup" onclick="searching()" type="button" class="btn btn-info">Search</button>
 				<button id="createGroup" type="button" onclick="createGroupPage()" class="btn btn-info">Create Group</button>
 			</div>
+			<div id="groupInfo"></div>
+			<div id="plan"></div>
 			<div id="groupTable"></div>
+			<div id="cost"></div>
+			<div id="totalcost"></div>
 			<div id='joinGroupDiv' class='hidden'>
 				<button type="button" onclick="joinGroup()" class="btn btn-info" id="joinGroupBtn">Join Group</button>
 			</div>
 			<div id='leaveGroupDiv' class='hidden'>
 				<button type="button" onclick="leaveGroup()" class="btn btn-info" id="leaveGroupButton">Leave Group</button>
+				<button type="button" onclick="selectGroup()" class="btn btn-info" id="leaveGroupButton">Select Group</button>
 			</div>
 			<div id="createGroupFormdiv" class='hidden'>
 			<form id="createGroupForm" class="form-signin">
@@ -105,6 +113,8 @@
 				<div id="groupSuccess" class="hidden"><h5>Group successfully created!</h5></div>
 			</div>
 			<div id="joinError" class="hidden"><h5>You are already part of the group!</h5></div>
+			<div id="sizeError" class="hidden"><h5>Cannot exceed group size!</h5></div>
+			<div id="groupSelected"></div>
 	</div>	<!-- /container -->
 
 </main>

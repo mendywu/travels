@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Python Flask Bucket List App</title>
+    <title>Travel Agency</title>
 
 
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/signup.css" rel="stylesheet">
-
+    <style>
+    h2 {
+            color: #ff0000;
+    }
+    #SignUp {
+      float: right ;
+      width: 40% ;
+    }
+    #SignIn {
+      float: left;
+      width: 40%;
+    }
+    </style>
   </head>
 
   <body>
@@ -20,31 +32,52 @@
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" ><a href="home">Home</a></li>
-            <li role="presentation"><a href="#">Sign In</a></li>
-            <li role="presentation" class="active"><a href="#">Sign Up</a></li>
+            <li role="presentation" ><a href="/home">Home</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Python Flask App</h3>
+        <h3 class="text-muted">Travel Agency Login</h3>
       </div>
 
-      <div class="jumbotron">
-        <h1>Bucket List App</h1>
-        <form class="form-signin">
-        <label for="inputName" class="sr-only">Name</label>
-        <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+      {% if error %}
+        <h2>{{error}}</h2>
+      {% endif %}
 
-        <button id="btnSignUp" onclick="createAGroup();" class="btn btn-lg btn-primary btn-block" type="button">Sign up</button>
-      </form>
-      </div>
+        <div id="SignUp">
 
-      <footer class="footer">
-        <p>&copy; Company 2015</p>
-      </footer>
+          <h3>Sign Up</h3>
+          <form action = "http://localhost:5000/signUp" method = "POST">
+            <div class="form-group">
+                <input type="name" name="inputFName" id="inputFName" class="form-control" placeholder="First Name" required autofocus>
+            </div>
+            <div class="form-group">
+                <input type="name" name="inputLName" id="inputLName" class="form-control" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <input type="name" name="inputID" id="inputID" class="form-control" placeholder="ID Number" required autofocus>
+              </div>
+              <div class="form-group">
+                <input type="name" name="inputAge" id="inputAge" class="form-control" placeholder="Age" required>
+              </div>
+              <div class="form-group">
+                <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+              </div>
+
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign Up</button>
+          </form>
+        </div>
+        <div id="SignIn">
+          <h3>Sign In</h3>
+          <form action = "http://localhost:5000/signIn" method = "POST">
+            <div class="form-group">
+                <input type="name" name="inputID" id="inputID" class="form-control" placeholder="ID Number" required autofocus>
+            </div>
+            <div class="form-group">
+              <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign In</button>
+          </form>
+
+        </div>
 
     </div>
   </body>

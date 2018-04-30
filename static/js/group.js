@@ -14,10 +14,15 @@ function createGroupPage(){
     item = document.getElementById("groupSuccess");
     item.className = 'hidden';
 
-    var joining = document.getElementById("joinError");
-    joining.className = 'hidden';
+    item = document.getElementById("joinError");
+    item.className = 'hidden';
 
     $("#groupTable").html("");
+    $('#plan').html("");
+    $('#cost').html("");
+    $('#totalcost').html("");
+    $('#groupInfo').html("");
+    $('#groupSelected').html("");
 }
 
 function joinGroup() {
@@ -31,8 +36,11 @@ function joinGroup() {
               console.log("you already in!");
               var item = document.getElementById("joinError");
               item.className = 'unhidden';
+          } else if (resp.message == 0) {
+            var item = document.getElementById("sizeError");
+            item.className = 'unhidden';
           } else {
-            searching();
+              searching();
           }
       },
       error: function(error) {
@@ -56,7 +64,27 @@ function leaveGroup() {
   });
 }
 
+function selectGroup() {
+  $.ajax({
+      url: '/selectGroup',
+      data: $('#groupForm').serialize(),
+      type: 'POST',
+      success: function(response) {
+          $('#groupSelected').html("<h4>Group selected.</h4>");
+          console.log(response);
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
 function createAGroup(){
+      $('#plan').html("");
+      $('#cost').html("");
+      $('#groupSelected').html("");
+      $('#groupInfo').html("");
+      $('#totalcost').html("");
       var joining = document.getElementById("groupSuccess");
       joining.className = 'hidden';
       joining = document.getElementById("groupError");
@@ -86,6 +114,11 @@ function createAGroup(){
     };
 
 function searching() {
+        $('#plan').html("");
+        $('#cost').html("");
+        $('#groupInfo').html("");
+        $('#totalcost').html("");
+        $('#groupSelected').html("");
         var item = document.getElementById("createGroupFormdiv");
         item.className = 'hidden';
         item = document.getElementById("joinGroupDiv");
@@ -116,15 +149,28 @@ function searching() {
                       id = list.Passengers[i][0];
                       age  = list.Passengers[i][1];
                       gender = list.Passengers[i][2];
-                      name = list.Passengers[i][3];
-                      data += ("<tr><td>"+id+"</td><td>"+name+"</td><td>"+age+"</td><td>"+gender+"</td></tr>");
+                      fname = list.Passengers[i][4];
+                      lname = list.Passengers[i][5];
+                      data += ("<tr><td>"+id+"</td><td>"+fname+"</td><td>"+lname+"</td><td>"+age+"</td><td>"+gender+"</td></tr>");
                       console.log(data);
                     }
-                    var result = '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">Name</th><th scope="col">Age</th><th scope="col">Gender</th></tr></thead><tbody>'+data+'</tbody></table>';
+                    var result = '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">First Name</th><th scope="col">Last Name</th><th scope="col">Age</th><th scope="col">Gender</th></tr></thead><tbody>'+data+'</tbody></table>';
+                    $('#groupInfo').html("<h5>Group ID:  "+list.GrpID+" Size:  "+list.Passengers.length+" / "+list.GrpSize+"</h5>");
                     $("#groupTable").html(result);
+                    if (list.Transport != 0) {
+                      if (list.Date == 0){
+                        $('#plan').html("<h5>Traveling from "+list.Location[0]+" to "+list.Location[1]+" by "+list.Transport+"</h5>");
+                      } else {
+                        $('#plan').html("<h5>Traveling from "+list.Location[0]+" to "+list.Location[1]+" by "+list.Transport+" on "+list.Date+"</h5>");
+                      }
+                      $('#cost').html("<h5>Cost of trip per person: $"+list.Cost+"</h5>");
+                      $('#totalcost').html("<h5>Total Cost: $"+(list.Cost*list.Passengers.length)+"</h5>");
+                    } else {
+                      $('#plan').html("<h5>No travel plans yet.</h5>");
+                    }
                     var item = document.getElementById("joinGroupDiv");
                     item.className = 'unhidden';
-                    if (list.inGroup == 1) {
+                    if (list.inGroup == 1) { // current user is in the group
                       var item = document.getElementById("leaveGroupDiv");
                       item.className = 'unhidden';
                     }

@@ -26,18 +26,8 @@
 		<h1 id="logo" class="text-center">
 			<span class="title" style="font-size:190%; font-weight:bold">Travel Agency</span>
 			<span class="tagline" style="font-size:60%"><b>Book your next vacation today!</b>
-				{% if name != "" %}
-			<span class="tagline" style="font-size:90%"><b>Welcome Back, {{name}}!</b>
-				{% endif %}
-				{% if nameNew %}
-			<span class="tagline" style="font-size:90%"><b>Welcome, {{nameNew}}!</b>
-				{% endif %}
-				<br><br>{% if name == "" %}
+				<br><br>
 				<p class="text-center"><a href="showSignUp" class="btn btn-action">Start</a></p>
-				{% endif %}
-				{% if name != "" %}
-				<p class="text-center"><a href="signOut" class="btn btn-action">Sign out</a></p>
-				{% endif %}
 		</h1>
 	</div>
 	<nav class="navbar navbar-default navbar-sticky">
@@ -59,10 +49,11 @@
 	</nav>
 </header>
 
+<center> Traveling from {{src}} to {{dst}} </center>
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="../static/js/template.js"></script>
+<script src="/js/template.js"></script>
 </body>
 </html>

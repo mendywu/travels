@@ -14,9 +14,12 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
-curID = 0 # holds the PassengerID who is logged in
-name = ""
-grp = []
+curID = 0           # the PassengerID who is logged in
+name = ""           # the name of Passenger that is logged in
+grp = 0             # group selected
+source = ""         # source location
+destId = 0
+dest = ""           # destination location
 
 @app.route("/")
 def main():
@@ -96,9 +99,9 @@ def joinGroup():
 
 @app.route('/selectGroup',methods=['POST'])
 def selectGroup():
-    global curr_grp
-    curr_grp = request.form['grpID']
-    return json.dumps({'result':curr_grp})
+    global grp
+    grp = request.form['grpID']
+    return json.dumps({'result':grp})
 
 @app.route('/searchGroup',methods=['POST'])
 def checkGroup():
@@ -151,6 +154,8 @@ def checkGroup():
         if len(transport) != 0:
             date = transport[0][0]
 
+    #TODO: search for accommodation price as well
+
     query = ('SELECT SourceId, DestinationId FROM TravelsTo WHERE TransportationId =%s')
     cursor.execute(query,transportationId)
     location = cursor.fetchall()
@@ -171,6 +176,8 @@ def checkGroup():
 
 @app.route('/createGroup',methods=['POST'])
 def createGroup():
+    if name == "":
+        return json.dumps({'message':0})
 
     _id = request.form['inputGrpID']
     _size = request.form['inputGrpSize']
@@ -250,10 +257,30 @@ def leaveGroup():
 
     return json.dumps({'message':1})
 
-############  REVIEWS TRANSACTIONS  ######################
-@app.route('/review')
-def review():
-    return render_template('review.html',name=name)
+############  ACCOMMODATION TRANSACTIONS  ######################
+@app.route('/accommodation')
+def accommodations():
+    global dest
+    city = dest.split(",")[0]
+    cursor.execute('SELECT Id, Name, Rate, AccommodationType,City from Accommodation where City=%s',(city))
+    options = cursor.fetchall()
+    return render_template('accommodation.html',name=name, options=options)
+
+
+############  LOCATION TRANSACTIONS  ######################
+@app.route('/showLoc')
+def getLoc():
+    cursor.execute('SELECT city, state, country FROM location')
+    data = cursor.fetchall() # returns list of tuples
+    return render_template('loc.html',data = data, name=name)
+
+@app.route('/srcdst', methods=['POST'])
+def setSourceDest():
+    global source
+    global dest
+    source = request.form['source']
+    dest = request.form['dest']
+    return render_template('srcdst.html',src=source, dst=dest)
 
 if __name__ == "__main__":
     app.run()

@@ -6,7 +6,7 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 
-	<title>Reviews</title>
+	<title>Select Accommodation</title>
 	<style>
 		.hidden{
 		    display:none;
@@ -36,10 +36,8 @@
 <header id="header">
 	<div id="head" class="parallax" parallax-speed="1">
 		<h1 id="logo" class="text-center">
-			<span class="title">Reviews</span>
-      {% if name != "" %}
+			<span class="title">Accommodations</span>
     <span class="tagline" style="font-size:90%"><b>Hello, {{name}}!</b>
-      {% endif %}
 		</h1>
 	</div>
 
@@ -52,10 +50,10 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="home">Home</a></li>
-					<li><a href="">Book a Trip</a></li>
-					<li><a href="">Locations</a></li>
-					<li><a href="joinGroup">Join Travel Group</a></li>
-					<li><a href="review">Reviews</a></li>
+					<li><a href="showLoc">Locations</a></li>
+					<li><a href="transportation">Transportation</a></li>
+					<li><a href="accommodation">Accommodations</a></li>
+					<li><a href="joinGroup">Travel Groups</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -65,18 +63,40 @@
 <main id="main">
 	<div class="container">
 		<div class="row topspace">
-				<button id="writeReviewBtn" type="button" onclick="showReviewBox()" class="btn btn-info">Write Reivew</button>
+					<label for="accomSelect">Select accommodation</label>
+				<select name = "accomSelect"class="form-control">
+				  <option value="" selected disabled>Select an accommodation:</option>
+					 <option value="">No accommodation needed.</option>
+					{% for item in options %}
+						<option value="{{item[0]}}">{{item[1]}}, ${{item[2]}}, {{item[3]}}</option>
+				    {% endfor %}
+				</select>
+				<br>
+				<input type = "submit" value = "submit" class="btn btn-info">
+				<br>
+			<table class="table">
+				<thead>
+					<tr>
+							<td scope="col"><b>Name</td>
+							<td scope="col"><b>Rate per night</td>
+							<td scope="col"><b>Type</td>
+							<td scope="col"><b>City</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in options %}
+					<tr onclick='clickable-row'>
+							<td> {{item[1]}}</td>
+							<td> ${{item[2]}}</td>
+							<td> {{item[3]}}</td>
+							<td> {{item[4]}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 			</div>
-      <div id="reviewForm" class="hidden">
-        <br>
-        <div class="form-group">
-            <label for="reviewBox">Review:</label>
-            <textarea class="form-control" rows="5" id="reviewBox" name="reviewBox"></textarea>
-        </div>
-        <button type="button" onclick="submitReview()" class="btn btn-info" id="submitReviewBtn">Submit</button>
-      </div>
-	</div>	<!-- /container -->
 
+			<br><br><br><br>
 </main>
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->

@@ -102,6 +102,10 @@ function createAGroup(){
                   console.log("already exists");
                   var item = document.getElementById("groupError");
                   item.className = 'unhidden';
+              } else if (response.message == 0) {
+                  console.log("you're not logged in")
+                  var item = document.getElementById("logInError");
+                  item.className = 'unhidden';
               } else {
                 document.getElementById("grpID").value =   document.getElementById("inputGrpID").value;
                 searching();
@@ -181,3 +185,12 @@ function searching() {
             }
         });
     };
+
+$('#groupForm').submit(function () {
+     searching();
+     return false;
+    });
+$('#createGroupForm').submit(function () {
+    createAGroup();
+    return false;
+});

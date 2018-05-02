@@ -162,13 +162,8 @@ function searching() {
                     $('#groupInfo').html("<h5>Group ID:  "+list.GrpID+" Size:  "+list.Passengers.length+" / "+list.GrpSize+"</h5>");
                     $("#groupTable").html(result);
                     if (list.Transport != 0) {
-                      if (list.Date == 0){
-                        $('#plan').html("<h5>Traveling from "+list.Location[0]+" to "+list.Location[1]+" by "+list.Transport+"</h5>");
-                      } else {
-                        $('#plan').html("<h5>Traveling from "+list.Location[0]+" to "+list.Location[1]+" by "+list.Transport+" on "+list.Date+"</h5>");
-                      }
                       if (list.Accom != "None"){
-                        $('#plan').append("<h5>Staying at "+list.Accom+"</h5>")
+                        $('#plan').append("<h5>Staying at "+list.Accom+" in "+list.AccomCity+"</h5>")
                       }
                       $('#cost').html("<h5>Cost of trip per person: $"+list.Cost+"</h5>");
                       $('#totalcost').html("<h5>Total Cost: $"+(list.Cost*list.Passengers.length)+"</h5>");

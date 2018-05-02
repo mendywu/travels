@@ -49,7 +49,6 @@
 					<li><a href="accommodation">Accommodations</a></li>
 					<li><a href="joinGroup">Travel Groups</a></li>
           <li><a href="/payment">Payment</a></li>
-          <li><a href="/bookTrip">Book Trip</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -58,6 +57,9 @@
 
 
 <div class="container">
+  {% if src %}
+    <center> Traveling from {{src}} to {{dst}} </center>
+  {% endif %}
   <form class = "form-searchTransportation">
 
   <div class="form-group">

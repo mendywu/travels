@@ -139,59 +139,39 @@ def checkGroup():
     query = ('SELECT TransportationId FROM TravelsBy WHERE GrpId=%s')
     cursor.execute(query,grp_id)
     transport = cursor.fetchall()
-    transportationId = 0
+    transportationIds = []
     if len(transport) != 0:
-        transportationId = transport[0][0]
+        for item in transport:
+            transportationIds.append(item[0])
     else:
         return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,'inGroup':inGroup,'Transport':0})
 
-    query = ('SELECT Type, Cost FROM TransportationMethod WHERE Id=%s')
-    cursor.execute(query,transportationId)
-    transport = cursor.fetchall()
-    transportationMethod = 0
-    cost = 0
-    if len(transport) != 0:
-        transportationMethod = transport[0][0]
-        cost = transport[0][1]
-
-    date = 0
-    if transportationMethod == 'Flight':
-        query = ('SELECT Date FROM Flight WHERE Id=%s')
-        cursor.execute(query,transportationId)
+    for ids in transportationIds:
+        query = ('SELECT Type, Cost FROM TransportationMethod WHERE Id=%s')
+        cursor.execute(query,ids)
         transport = cursor.fetchall()
-        if len(transport) != 0:
-            date = transport[0][0]
+        transportationMethod = 0
+        cost = 0
+        for item in transport:
+            transportationMethod = item[0]
+            cost += item[1]
 
     accomName = "None"
     query = ('SELECT AccommodationId FROM StaysIn WHERE GrpId =%s')
     cursor.execute(query,grp_id)
     AccomID = cursor.fetchone()
     if AccomID:
-        query = ('SELECT Name,Rate FROM Accommodation WHERE Id =%s')
+        query = ('SELECT Name,Rate,City FROM Accommodation WHERE Id =%s')
         cursor.execute(query,AccomID)
         result = cursor.fetchone()
         if result:
             cost += result[1]
             accomName = result[0]
-
-    query = ('SELECT SourceId, DestinationId FROM TravelsTo WHERE TransportationId =%s')
-    cursor.execute(query,transportationId)
-    location = cursor.fetchall()
-    srcId = location[0][0]
-    destId = location[0][1]
-
-    query = ('SELECT City FROM Location WHERE Id =%s')
-    cursor.execute(query,srcId)
-    src_location = cursor.fetchall()
-    src = src_location[0][0]
-
-    query = ('SELECT City FROM Location WHERE Id =%s')
-    cursor.execute(query,destId)
-    dest_location = cursor.fetchall()
-    dest_ = dest_location[0][0]
-
+            city = result[2]
+    global source
+    global dest
     return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,
-    'Date':date,'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[src,dest_],'Accom':accomName})
+    'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[source,dest],'Accom':accomName,"AccomCity":city})
 
 @app.route('/createGroup',methods=['POST'])
 def createGroup():
@@ -283,7 +263,7 @@ def accommodations():
     city = dest.split(",")[0]
     cursor.execute('SELECT Id, Name, Rate, AccommodationType,City from Accommodation where City=%s',(city))
     options = cursor.fetchall()
-    return render_template('accommodation.html',name=name, options=options)
+    return render_template('accommodation.html', dest=dest, name=name, options=options)
 
 @app.route('/selectAccom', methods=['POST'])
 def selectAccom():
@@ -306,7 +286,8 @@ def setSourceDest():
     global dest
     source = request.form['source']
     dest = request.form['dest']
-    return render_template('srcdst.html',src=source, dst=dest)
+    return render_template('transportation.html', src=source, dst=dest)
+    #return render_template('srcdst.html',src=source, dst=dest)
 
 ############# TRANSPORTATION TRANSACTIONS ###################
 @app.route('/chooseFlight', methods=['POST'])
@@ -322,6 +303,7 @@ def selectTransportation():
     cursor.execute(query, data)
 
     result = cursor.fetchone()
+    departureFlightId = result
 
     if result is None:
         return json.dumps({'response':'bad'})
@@ -330,8 +312,15 @@ def selectTransportation():
     data = (returnFlight)
 
     cursor.execute(query, data)
-
     result = cursor.fetchone()
+
+    returnFlightId = result
+
+    query = ('INSERT INTO TravelsBy (GrpId, TransportationId)' 'VALUES(%s,%s)')
+    global grp
+    cursor.execute(query,(grp,departureFlightId))
+    cursor.execute(query,(grp,returnFlightId))
+    conn.commit()
 
     if result is None:
             return json.dumps({'response':'bad'})

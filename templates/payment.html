@@ -25,19 +25,7 @@
 	<div id="head" class="parallax" parallax-speed="2">
 		<h1 id="logo" class="text-center">
 			<span class="title" style="font-size:190%; font-weight:bold">Travel Agency</span>
-			<span class="tagline" style="font-size:60%"><b>Book your next vacation today!</b>
-				{% if name != "" %}
-			<span class="tagline" style="font-size:90%"><b>Welcome Back, {{name}}!</b>
-				{% endif %}
-				{% if nameNew %}
-			<span class="tagline" style="font-size:90%"><b>Welcome, {{nameNew}}!</b>
-				{% endif %}
-				<br><br>{% if name == "" %}
-				<p class="text-center"><a href="showSignUp" class="btn btn-action">Start</a></p>
-				{% endif %}
-				{% if name != "" %}
-				<p class="text-center"><a href="signOut" class="btn btn-action">Sign out</a></p>
-				{% endif %}
+			<span class="tagline" style="font-size:90%"><b>Payment</b>
 		</h1>
 	</div>
 	<nav class="navbar navbar-default navbar-sticky">
@@ -49,10 +37,10 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="home">Home</a></li>
-					<li><a href="showLoc">Locations</a></li>
+					<li><a href="">Locations</a></li>
 					<li><a href="/transportation">Transportation</a></li>
-					<li><a href="accommodation">Accommodations</a></li>
-					<li><a href="joinGroup">Travel Groups</a></li>
+					<li><a href="">Accommodations</a></li>
+					<li><a href="">Travel Groups</a></li>
 					<li><a href="/payment">Payment</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
@@ -60,10 +48,43 @@
 	</nav>
 </header>
 
+<div class="container">
+  <form class = "form-addPayment">
+    <div class="form-group">
+        <input type="name" name="cardNumber" id="cardNumber" class="form-control" placeholder="Card Number" required autofocus>
+    </div>
+    <div class="form-group">
+        <input type="name" name="cardType" id="cardType" class="form-control" placeholder="Card Type (Visa, MasterCard, etc.)" required>
+    </div>
+    <div class="form-group">
+      <button id="addPaymentOptions" type="button" class="btn btn-info">Add Payment Option</button>
+    </div>
+
+  </form>
+  <div class="form-group">
+  <button id="searchPaymentOptions" type="button" class="btn btn-info">List Current Payment Options</button>
+  </div>
+
+  <div id="sd"></div>
+
+  <div id="PaymentOptions"></div>
+
+  <form class = "form-choosePayment">
+    <div class="form-group">
+      <input type="name" name="cardNumberSelect" id="cardNumberSelect" class="form-control" placeholder="Card Number" required autofocus>
+    </div>
+    <div class="form-group">
+      <button id="choosePaymentMethod" type="button" class="btn btn-info">Select Payment Method</button>
+    </div>
+  </form>
+  <div id="paymentMethodConfirmation"></div>
+
+</div>
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="../static/js/template.js"></script>
+<script src="../static/js/payment.js"></script>
+
 </body>
 </html>

@@ -167,6 +167,9 @@ function searching() {
                       } else {
                         $('#plan').html("<h5>Traveling from "+list.Location[0]+" to "+list.Location[1]+" by "+list.Transport+" on "+list.Date+"</h5>");
                       }
+                      if (list.Accom != "None"){
+                        $('#plan').append("<h5>Staying at "+list.Accom+"</h5>")
+                      }
                       $('#cost').html("<h5>Cost of trip per person: $"+list.Cost+"</h5>");
                       $('#totalcost').html("<h5>Total Cost: $"+(list.Cost*list.Passengers.length)+"</h5>");
                     } else {

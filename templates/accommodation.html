@@ -27,7 +27,7 @@
 	<link rel="stylesheet" href="../static/assets/css/styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="../static/js/jquery-3.3.1.min.js"></script>
-	<script src="../static/js/review.js"></script>
+	<script src="../static/js/accommodation.js"></script>
 
 	<!--[if lt IE 9]> <script src="assets/js/html5shiv.js"></script> <![endif]-->
 </head>
@@ -54,6 +54,7 @@
 					<li><a href="transportation">Transportation</a></li>
 					<li><a href="accommodation">Accommodations</a></li>
 					<li><a href="joinGroup">Travel Groups</a></li>
+					<li><a href="/payment">Payment</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -63,6 +64,7 @@
 <main id="main">
 	<div class="container">
 		<div class="row topspace">
+			<form id="selectAccommForm">
 					<label for="accomSelect">Select accommodation</label>
 				<select name = "accomSelect"class="form-control">
 				  <option value="" selected disabled>Select an accommodation:</option>
@@ -72,7 +74,9 @@
 				    {% endfor %}
 				</select>
 				<br>
-				<input type = "submit" value = "submit" class="btn btn-info">
+				<button type = "button" onclick="selectAccom()" class="btn btn-info">Submit</button>
+				<div id="acomSelectSuccess" class="hidden"><h5>Successfully booked accommodation!</h5></div>
+			</form>
 				<br>
 			<table class="table">
 				<thead>
@@ -85,7 +89,7 @@
 				</thead>
 				<tbody>
 					{% for item in options %}
-					<tr onclick='clickable-row'>
+					<tr>
 							<td> {{item[1]}}</td>
 							<td> ${{item[2]}}</td>
 							<td> {{item[3]}}</td>

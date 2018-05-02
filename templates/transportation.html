@@ -6,8 +6,15 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 
-	<title>Travel Agency</title>
-
+	<title>Transportation</title>
+  <style>
+		.hidden{
+		    display:none;
+		}
+		.unhidden{
+		    display:block;
+		}
+</style>
 	<!-- Bootstrap -->
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
 	<!-- Icons -->
@@ -23,21 +30,10 @@
 
 <header id="header">
 	<div id="head" class="parallax" parallax-speed="2">
-    <h1 id="logo" class="text-center">
-      <span class="title" style="font-size:190%; font-weight:bold">Locations</span>
-        {% if name != "" %}
-      <span class="tagline" style="font-size:90%"><b>Welcome Back, {{name}}!</b>
-        {% endif %}
-        {% if nameNew %}
-      <span class="tagline" style="font-size:90%"><b>Welcome, {{nameNew}}!</b>
-        {% endif %}
-        <br><br>{% if name == "" %}
-        <p class="text-center"><a href="showSignUp" class="btn btn-action">Start</a></p>
-        {% endif %}
-        {% if name != "" %}
-        <p class="text-center"><a href="signOut" class="btn btn-action">Sign out</a></p>
-        {% endif %}
-    </h1>
+		<h1 id="logo" class="text-center">
+			<span class="title" style="font-size:190%; font-weight:bold">Travel Agency</span>
+			<span class="tagline" style="font-size:90%"><b>Transportation</b>
+		</h1>
 	</div>
 	<nav class="navbar navbar-default navbar-sticky">
 		<div class="container-fluid">
@@ -49,66 +45,60 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="home">Home</a></li>
 					<li><a href="showLoc">Locations</a></li>
-					<li><a href="transportation">Transportation</a></li>
+					<li><a href="/transportation">Transportation</a></li>
 					<li><a href="accommodation">Accommodations</a></li>
 					<li><a href="joinGroup">Travel Groups</a></li>
-					<li><a href="/payment">Payment</a></li>
+          <li><a href="/payment">Payment</a></li>
+          <li><a href="/bookTrip">Book Trip</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
 	</nav>
 </header>
 
-<main id = "main">
-<div class = "container">
 
-<form method = "POST" action = "/srcdst">
-Source Location: </br>
-<select name = "source" class="form-control">
-  <option value="">Select a location:</option>
-	{% for item in data %}
-		<option value="{{item[0]}}">{{item[0]}}, {{item[1]}}, {{item[2]}}</option>
-    {% endfor %}
-</select>
-<br></br>
-Destination Location: </br>
-<select name = "dest"class="form-control">
-  <option value="">Select a location:</option>
-	{% for item in data %}
-		<option value="{{item[0]}}">{{item[0]}}, {{item[1]}}, {{item[2]}}</option>
-    {% endfor %}
-</select>
-<input type = "submit" value = "submit" class="btn btn-info">
+<div class="container">
+  <form class = "form-searchTransportation">
+
+  <div class="form-group">
+      <input type="name" name="departureDate" id="departureDate" class="form-control" placeholder="Date of Departure (YYYY-MM-DD)" required autofocus>
+  </div>
+  <div class="form-group">
+      <input type="name" name="returnDate" id="returnDate" class="form-control" placeholder="Return Date (YYYY-MM-DD)" required autofocus>
+  </div>
+  <button id="searchTransportation" type="button" class="btn btn-info">Search</button>
 </form>
-</br>
+<div class="form-group">
 
-<table class="table" border="1" cellpadding="5" cellspacing="5">
-  <thead>
-    <tr>
-        <td scope="col">City</td>
-        <td scope="col">State</td>
-        <td scope="col">Country</td>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in data %}
-    <tr>
-        <td> {{item[0]}}</td>
-        <td> {{item[1]}}</td>
-        <td> {{item[2]}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</br>
-</script>
-</table>
+  <div id="sd"></div>
+</div>
 
+<div id="TransportOptions"></div>
+
+<div id="rsd"></div>
+<div id="rTransportOptions"></div>
+
+<form class = "form-chooseTransportation">
+<div class="form-group">
+    <input type="name" name="departureFlight" id="departureFlight" class="form-control" placeholder="Departure Flight ID Number" required autofocus>
+</div>
+<div class="form-group">
+    <input type="name" name="returnFlight" id="returnFlight" class="form-control" placeholder="Return Flight ID Number" required autofocus>
+</div>
+<button id="chooseFlight" type="button" class="btn btn-info">Choose Flight</button>
+</form>
+
+<div id="flightConfirmation"></div>
 
 
+
+
+</div>
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="../static/assets/js/template.js"></script>
+<script src="../static/js/transportation.js"></script>
+
 </body>
 </html>

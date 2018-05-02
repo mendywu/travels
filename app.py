@@ -14,9 +14,9 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
-curID = 0           # the PassengerID who is logged in
-name = ""           # the name of Passenger that is logged in
-grp = 0             # group selected
+curID = 1111          # the PassengerID who is logged in
+name = "Mendy"           # the name of Passenger that is logged in
+grp = 1121             # group selected
 source = ""         # source location
 destId = 0
 dest = ""           # destination location
@@ -28,6 +28,14 @@ def main():
 @app.route("/home")
 def home():
     return render_template('index.html', name=name)
+
+@app.route("/transportation")
+def transportation():
+    return render_template('transportation.html')
+
+@app.route("/payment")
+def payment():
+    return render_template('payment.html')
 
 ############  SIGN IN/SIGN UP TRANSACTIONS  ######################
 @app.route('/showSignUp')
@@ -154,7 +162,17 @@ def checkGroup():
         if len(transport) != 0:
             date = transport[0][0]
 
-    #TODO: search for accommodation price as well
+    accomName = "None"
+    query = ('SELECT AccommodationId FROM StaysIn WHERE GrpId =%s')
+    cursor.execute(query,grp_id)
+    AccomID = cursor.fetchone()
+    if AccomID:
+        query = ('SELECT Name,Rate FROM Accommodation WHERE Id =%s')
+        cursor.execute(query,AccomID)
+        result = cursor.fetchone()
+        if result:
+            cost += result[1]
+            accomName = result[0]
 
     query = ('SELECT SourceId, DestinationId FROM TravelsTo WHERE TransportationId =%s')
     cursor.execute(query,transportationId)
@@ -172,7 +190,8 @@ def checkGroup():
     dest_location = cursor.fetchall()
     dest_ = dest_location[0][0]
 
-    return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,'Date':date,'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[src,dest_]})
+    return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,
+    'Date':date,'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[src,dest_],'Accom':accomName})
 
 @app.route('/createGroup',methods=['POST'])
 def createGroup():
@@ -266,6 +285,13 @@ def accommodations():
     options = cursor.fetchall()
     return render_template('accommodation.html',name=name, options=options)
 
+@app.route('/selectAccom', methods=['POST'])
+def selectAccom():
+    accomId = request.form['accomSelect']
+    global grp
+    cursor.execute('INSERT INTO StaysIn (AccommodationId, GrpId)' 'VALUES (%s,%s)',(accomId,grp))
+    conn.commit()
+    return json.dumps({'message':1})
 
 ############  LOCATION TRANSACTIONS  ######################
 @app.route('/showLoc')
@@ -281,6 +307,107 @@ def setSourceDest():
     source = request.form['source']
     dest = request.form['dest']
     return render_template('srcdst.html',src=source, dst=dest)
+
+############# TRANSPORTATION TRANSACTIONS ###################
+@app.route('/chooseFlight', methods=['POST'])
+def selectTransportation():
+    global departureFlight
+    departureFlight = request.form['departureFlight']
+    global returnFlight
+    returnFlight = request.form['returnFlight']
+
+    query = ('SELECT TransportationMethod.Id FROM TransportationMethod WHERE TransportationMethod.Id = %s')
+    data = (departureFlight)
+
+    cursor.execute(query, data)
+
+    result = cursor.fetchone()
+
+    if result is None:
+        return json.dumps({'response':'bad'})
+
+    query = ('SELECT TransportationMethod.Id FROM TransportationMethod WHERE TransportationMethod.Id = %s')
+    data = (returnFlight)
+
+    cursor.execute(query, data)
+
+    result = cursor.fetchone()
+
+    if result is None:
+            return json.dumps({'response':'bad'})
+
+
+    return json.dumps({'response':'ok'})
+
+@app.route('/searchTransportation', methods=['POST'])
+def searchTransportation():
+    departDate = request.form['departureDate']
+    returnDate = request.form['returnDate']
+
+    query = ('SELECT Location.Id FROM Location WHERE Location.City = %s')
+    data = (source);
+    cursor.execute(query, data)
+    sourceID = cursor.fetchone()[0];
+
+    query = ('SELECT Location.Id FROM Location WHERE Location.City = %s')
+    data = (dest);
+    cursor.execute(query, data)
+    destID = cursor.fetchone()[0];
+
+    query = ('SELECT TransportationMethod.Id, TransportationMethod.Cost, Flight.Carrier, Flight.Class FROM TransportationMethod, TravelsTo, Flight WHERE TransportationMethod.Id = TravelsTo.TransportationId AND TravelsTo.SourceId = %s AND TravelsTo.DestinationId = %s AND Flight.Depart = %s AND Flight.Id = TransportationMethod.Id')
+    data = (sourceID, destID, departDate)
+    cursor.execute(query, data)
+
+    departOptions = cursor.fetchall()
+
+    query = ('SELECT TransportationMethod.Id, TransportationMethod.Cost, Flight.Carrier, Flight.Class FROM TransportationMethod, TravelsTo, Flight WHERE TransportationMethod.Id = TravelsTo.TransportationId AND TravelsTo.SourceId = %s AND TravelsTo.DestinationId = %s AND Flight.Depart = %s AND Flight.Id = TransportationMethod.Id')
+    data = (destID, sourceID, returnDate)
+    cursor.execute(query, data)
+
+    returnOptions = cursor.fetchall()
+
+    return json.dumps({'departOptions':departOptions, 'returnOptions':returnOptions, 'source':source, 'dest':dest, 'departDate':departDate, 'returnDate':returnDate})
+
+################### PAYMENT TRANSACTIONS ############################
+
+@app.route('/addPaymentOptions', methods=['POST'])
+def addPaymentOptions():
+    cardNum = request.form['cardNumber']
+    cardType = request.form['cardType']
+    passengerId = curID
+    query = ('INSERT INTO Payment (CardNumber, Type, PassengerId)' 'VALUES (%s,%s,%s)')
+    data = (cardNum, cardType, passengerId)
+
+    cursor.execute(query, data)
+    conn.commit()
+
+    return viewPaymentOptions()
+
+@app.route('/viewPaymentOptions', methods=['POST'])
+def viewPaymentOptions():
+    query = ('SELECT Payment.CardNumber, Payment.Type FROM Payment WHERE Payment.PassengerId = %s')
+    data = (curID)
+    cursor.execute(query, data)
+
+    options = cursor.fetchall()
+
+    return json.dumps({'options':options, 'curID': curID})
+
+@app.route('/choosePaymentMethod', methods=['POST'])
+def choosePaymentMethod():
+    global cardNumber
+    cardNumber = request.form['cardNumberSelect']
+
+    query = ('SELECT Payment.CardNumber FROM Payment WHERE Payment.PassengerId = %s AND Payment.CardNumber = %s')
+    data = (curID, cardNumber)
+    cursor.execute(query, data)
+
+    result = cursor.fetchone()
+
+    if result is None:
+        return json.dumps({'response':'bad', 'curID':curID, 'cardNum':cardNumber})
+
+    return json.dumps({'response':'ok'})
 
 if __name__ == "__main__":
     app.run()

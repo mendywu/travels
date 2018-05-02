@@ -14,9 +14,9 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 cursor = conn.cursor()
-curID = 1111          # the PassengerID who is logged in
-name = "Mendy"           # the name of Passenger that is logged in
-grp = 1121             # group selected
+curID = 0          # the PassengerID who is logged in
+name = ""           # the name of Passenger that is logged in
+grp = 0             # group selected
 source = ""         # source location
 destId = 0
 dest = ""           # destination location

@@ -23,6 +23,7 @@ Presentation powerpoint included in files, but can also be found [here](https://
 * Search Groups
   * Shows all passengers in a group
   * Shows total and individual cost of trip
+  * Shows ID and Size of group
 * Select Group
 ### Locations
 * Show all possible locations

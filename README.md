@@ -13,26 +13,26 @@ Presentation powerpoint included in files, but can also be found [here](https://
 
 ## Transactions
 ### Passenger/Sign ins
-1) Sign in
-2) Sign up
-3) Sign out
+* Sign in
+* Sign up
+* Sign out
 ### Groups
-1) Join Group
-2) Leave Group
-3) Create Group
-4) Search Groups
+* Join Group
+* Leave Group
+* Create Group
+* Search Groups
   * Shows all passengers in a group
   * Shows total and individual cost of trip
-5) Select Group
+* Select Group
 ### Locations
-1) Show all possible locations
-2) Select source and destination location
+* Show all possible locations
+* Select source and destination location
 ### Transportation
-1) Search Transportation based on date
-2) Select Transportations to travel by
+* Search Transportation based on date and locations
+* Select Transportations to travel by
 ### Accommodations
-1) Show Accommodations based on city
-2) Select Accommodation
+* Show Accommodations based on city
+* Select Accommodation
 ### Payment
-1) Add Payment methods
-2) Select Payment method
+* Add Payment methods
+* Select Payment method

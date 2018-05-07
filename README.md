@@ -30,6 +30,9 @@ Presentation powerpoint included in files, but can also be found [here](https://
 ### Transportation
 1) Search Transportation based on date
 2) Select Transportations to travel by
+### Accommodations
+1) Show Accommodations based on city
+2) Select Accommodation
 ### Payment
 1) Add Payment methods
 2) Select Payment method

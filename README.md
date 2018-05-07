@@ -1,5 +1,5 @@
 # Travel Agency
-## By Samantha Belliveau, Dorothy Shek, Mendy Wu
+By Samantha Belliveau, Dorothy Shek, Mendy Wu
 
 # Steps to run:
 1) Connect to local host database

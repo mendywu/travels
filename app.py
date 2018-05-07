@@ -146,12 +146,12 @@ def checkGroup():
     else:
         return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,'inGroup':inGroup,'Transport':0})
 
+    cost = 0
     for ids in transportationIds:
         query = ('SELECT Type, Cost FROM TransportationMethod WHERE Id=%s')
         cursor.execute(query,ids)
         transport = cursor.fetchall()
         transportationMethod = 0
-        cost = 0
         for item in transport:
             transportationMethod = item[0]
             cost += item[1]
@@ -160,6 +160,8 @@ def checkGroup():
     query = ('SELECT AccommodationId FROM StaysIn WHERE GrpId =%s')
     cursor.execute(query,grp_id)
     AccomID = cursor.fetchone()
+    global source
+    global dest
     if AccomID:
         query = ('SELECT Name,Rate,City FROM Accommodation WHERE Id =%s')
         cursor.execute(query,AccomID)
@@ -168,8 +170,9 @@ def checkGroup():
             cost += result[1]
             accomName = result[0]
             city = result[2]
-    global source
-    global dest
+    else:
+        return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,
+        'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[source,dest]})
     return json.dumps({'result':1,'GrpID':grp_id,'GrpSize':size[0],'Passengers':passengers,
     'inGroup':inGroup,'Cost':cost,'Transport':transportationMethod,'Location':[source,dest],'Accom':accomName,"AccomCity":city})
 

@@ -166,7 +166,7 @@ function searching() {
                         $('#plan').append("<h5>Staying at "+list.Accom+" in "+list.AccomCity+"</h5>")
                       }
                       $('#cost').html("<h5>Cost of trip per person: $"+list.Cost+"</h5>");
-                      $('#totalcost').html("<h5>Total Cost: $"+(list.Cost*list.Passengers.length)+"</h5>");
+                      $('#totalcost').html("<h5>Total Cost: $"+Number((list.Cost*list.Passengers.length).toFixed(2))+"</h5>");
                     } else {
                       $('#plan').html("<h5>No travel plans yet.</h5>");
                     }

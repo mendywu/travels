@@ -17,7 +17,7 @@ PRIMARY KEY (Id)
 CREATE TABLE Grp (
 	Id		INT,
 	Size		INT,
-	Purpose	VARCHAR(9) CHECK (Purpose IN ('Business', 'P	leasure', 'Education')),
+	Purpose	VARCHAR(9) CHECK (Purpose IN ('Business', 'Pleasure', 'Education')),
 	CHECK (Id >= 0),
 	CHECK (Size >= 1),
 	PRIMARY KEY (Id)
@@ -183,23 +183,46 @@ INSERT INTO Grp (Id, Size, Purpose)
 VALUES ('1122', '2', 'Education');
 
 INSERT INTO TransportationMethod (Id, Cost, Type)
-VALUES ('1131', '100.00', 'Flight');
+VALUES ('1', '100.00', 'Flight');
 INSERT INTO TransportationMethod (Id, Cost, Type)
-VALUES ('1132', '100.00', 'Flight');
-
+VALUES ('2', '120.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('3', '100.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('4', '190.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('5', '170.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('6', '150.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('7', '170.00', 'Flight');
+INSERT INTO TransportationMethod (Id, Cost, Type)
+VALUES ('8', '150.00', 'Flight');
 INSERT INTO Flight (Id, Depart, Carrier, Class)
-VALUES('1131','2018-5-4','DELTA','Economy');
+VALUES('1','2018-5-7','DELTA','Economy');
 INSERT INTO Flight (Id, Depart, Carrier, Class)
-VALUES('1132','2018-5-4','DELTA','Economy');
+VALUES('2','2018-5-7','American Airlines','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('3','2018-5-7','Jet Blue','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('4','2018-5-7','DELTA','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('5','2018-5-7','American Airlines','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('6','2018-5-7','DELTA','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('7','2018-5-7','American Airlines','Economy');
+INSERT INTO Flight (Id, Depart, Carrier, Class)
+VALUES('8','2018-5-7','DELTA','Economy');
 
 INSERT INTO Location (Id, City, State, Country)
-VALUES ('1141', 'New York City', 'New York','United States of America	');
+VALUES ('1', 'New York City', 'New York','United States of America	');
 INSERT INTO Location (Id, City, State, Country)
 VALUES (3, 'Albany', 'New York', 'United States of America');
 INSERT INTO Location (Id, City, State, Country)
-VALUES ('1142', 'San Francisco', 'CA','United States of America');
+VALUES ('2', 'San Francisco', 'CA','United States of America');
 INSERT INTO Location (Id, City, State, Country)
-VALUES (5, 'Atlanta', 'Georgia', 'United States of America');
+VALUES (4, 'Atlanta', 'Georgia', 'United States of America');
 INSERT INTO Accommodation(Id, Rate, Name, AccommodationType, City)
 VALUES (1, '320.70', 'Fairfield Inn & Suites','Hotel', 'New York City');
 INSERT INTO Accommodation(Id, Rate,Name, AccommodationType, City)
@@ -209,17 +232,27 @@ VALUES (3, '20.56', 'The House of Susie','AirBnb', 'New York City');
 INSERT INTO Accommodation(Id, Rate,Name, AccommodationType, City)
 VALUES (4, '400.00', 'DoubleTree by Hilton','Hotel', 'San Francisco');
 INSERT INTO Accommodation(Id, Rate,Name, AccommodationType, City)
-VALUES (5, '450.52', 'DoubleTree by Hilton','Hotel', 'Georgia');
+VALUES (5, '450.52', 'DoubleTree by Hilton','Hotel', 'Atlanta');
 INSERT INTO Accommodation(Id, Rate,Name, AccommodationType, City)
 VALUES (6, '450.52', 'DoubleTree by Hilton','Hotel', 'Albany');
 
-INSERT INTO StaysIn (AccommodationId, GrpId)
-VALUES (4, 1121);
 
 INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
-VALUES ('1141', '1142', '1131');
+VALUES ('1', '2', '1');
 INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
-VALUES ('1142', '1141', '1132');
+VALUES ('2', '1', '2');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('3', '4', '3');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('4', '3', '4');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('1', '2', '5');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('4', '3', '6');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('2', '4', '7');
+INSERT INTO TravelsTo (SourceId, DestinationId, TransportationId)
+VALUES ('4', '2', '8');
 
 INSERT INTO ParticipatesIn (PassengerId, GrpId)
 VALUES ('1111', '1121');

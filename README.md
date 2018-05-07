@@ -1,4 +1,4 @@
-# Travel Agency
+# Travel Agency :airplane:
 By Samantha Belliveau, Dorothy Shek, Mendy Wu
 
 ## Steps to run:

@@ -21,8 +21,8 @@ Presentation powerpoint included in files, but can also be found [here](https://
 2) Leave Group
 3) Create Group
 4) Search Groups
-⋅⋅* Shows all passengers in a group
-⋅⋅* Shows total and individual cost of trip
+  1) Shows all passengers in a group
+  2) Shows total and individual cost of trip
 5) Select Group
 ### Locations
 1) Show all possible locations

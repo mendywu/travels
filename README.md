@@ -1,6 +1,4 @@
 # Travel Agency :airplane:
-By Samantha Belliveau, Dorothy Shek, Mendy Wu
-
 ## Steps to run:
 1) Connect to localhost database server
 2) Run the travel_agency.sql file
